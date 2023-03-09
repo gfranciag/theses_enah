@@ -1,0 +1,33 @@
+# Obtener registros de X7 biblioteca Bonfil Batalla -----------------------
+# Leer las urls desde el archivo xlsx
+url <- readxl::read_excel("/home/alux/tesis/url20tesisxhoja.xlsx")
+
+# Crear un objeto para guardar los resultados
+datos <- list()
+
+# Iterar sobre cada url
+for(i in 1:length(url$url)){
+  
+  # Descargar la página usando read_html
+  pagina <- read_html(url$url[i])
+  
+  # Extraer los datos necesarios y guardarlos en el objeto "datos"
+  datos[[i]] <- pagina %>% 
+    html_nodes(".td1:nth-child(11) , .td1:nth-child(4) , .td1:nth-child(3) , .td1:nth-child(2)") %>%
+    html_text()
+}
+
+# Combinar todos los resultados en un objeto tibble
+datos_tibble <- tibble(datos)
+library(writexl)
+
+# Escribe los datos a un archivo de Excel
+write_xlsx(datos_tibble, "datos.xls")
+
+
+
+
+rio::export(datos_tibbleb,"tabla_tb.xlsx")
+
+
+
